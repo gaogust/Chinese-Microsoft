@@ -1,6 +1,6 @@
 import re
 
-def Get_Text(text_path):
+def Get_Text(text_path):    #嵌套list
         temp_stat = []
         scena_stat = []
         with open(text_path, "r", encoding="UTF-8-sig") as file:
@@ -9,14 +9,25 @@ def Get_Text(text_path):
                 if line == 1:
                     temp_stat.append(line)
                     continue
-                if line.isdigit() == False:
+                if line.isdigit() == False: #不是数字
                     temp_stat.append(line)
                 else:
                     scena_stat.append(temp_stat)
                     temp_stat = [line]
             scena_stat.append(temp_stat)
             scena_stat.pop(0)
-            return scena_stat
+
+        k=0
+        while len(scena_stat)!=50:
+            #print(int(scena_stat[k][0])+1,scena_stat[k+1][0])
+            print(len(scena_stat))
+            if int(scena_stat[k][0])+1!=int(scena_stat[k+1][0]):
+                scena_stat[k].extend(scena_stat[k+1])
+                scena_stat.pop(k+1)
+            else:
+                k+=1
+            #print(scena_stat)
+        return scena_stat
 
 def word_match(text,words):
     les_sce=[]
@@ -53,8 +64,8 @@ def word_count(text,words):#每课解锁的每个scenario中出现了哪些词
                         wrd_temp.append(words[lesson][wrd + 1])
                         wrd_cnt=text[scenario][diag + 1].count(words[lesson][wrd + 1])  #指定词语在scenario中出现次数
                         wrd_len=len(words[lesson][wrd + 1]) #词语长度
-                        text[scenario][diag + 1]=text[scenario][diag + 1].encode("utf8").decode("utf8")
-                        text[scenario][diag + 1]=re.sub("[\s+\.\!\/_,$%^*(+\"\']+|[+——！，。？、~@#￥%……&*（）]+".encode("utf8").decode("utf8"),""encode("utf8").decode("utf8"),text[scenario][diag + 1])
+                        # text[scenario][diag + 1]=text[scenario][diag + 1].encode("utf8").decode("utf8")
+                        # text[scenario][diag + 1]=re.sub("[\s+\.\!\/_,$%^*(+\"\']+|[+——！，。？、~@#￥%……&*（）]+".encode("utf8").decode("utf8"),""encode("utf8").decode("utf8"),text[scenario][diag + 1])
                         sce_len+=len(text[scenario][diag + 1])   #scenario长度
                         wrd_totallen+=wrd_cnt*wrd_len
                         cnt+=wrd_cnt
@@ -120,8 +131,8 @@ def reg_match(text):
 
 if __name__ == '__main__':
 
-    scenario_path="D:\Learn Chinese\自适应\data\scenarios.txt"
-    word_path="D:\Learn Chinese\自适应\data\learning_item_words.txt"
+    scenario_path="D:\Learn Chinese\self-adap\data\scenarios.txt"
+    word_path="D:\Learn Chinese\self-adap\data\learning_item_words.txt"
     text=Get_Text(scenario_path)
     words=Get_Text(word_path)
     print(text)
